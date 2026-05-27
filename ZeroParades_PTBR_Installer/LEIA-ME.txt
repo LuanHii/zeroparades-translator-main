@@ -1,0 +1,87 @@
+Zero Parades - Traducao PT-BR
+================================
+
+Creditos:
+
+Traducao PT-BR por LuanHii.
+
+Como instalar:
+
+1. Extraia esta pasta em qualquer lugar.
+2. Dê dois cliques em Instalar_PTBR.bat.
+3. Aguarde o instalador encontrar o jogo e aplicar a traducao.
+4. Abra o jogo e va em Settings -> Language.
+5. Selecione Deutsch/Alemao. A traducao PT-BR aparece nesse slot.
+
+Instalacao manual:
+
+Use este metodo se voce nao quiser usar o .bat ou se o instalador nao encontrar
+o jogo automaticamente.
+
+1. Instale Python 3:
+   https://www.python.org/downloads/
+
+2. Abra o PowerShell dentro desta pasta.
+   Dica: clique com o botao direito dentro da pasta e escolha
+   "Abrir no Terminal".
+
+3. Instale as dependencias:
+
+   python -m pip install -r requirements.txt
+
+4. Rode o patch apontando para o bundle do seu jogo:
+
+   python po_to_bundle.py --bundle "CAMINHO_DO_JOGO\ZeroParades_Data\StreamingAssets\aa\StandaloneWindows64\g5ibkj7vdwf2g67g_assets_all_df231fe1e06c36a5cb63c87a08cd9257.bundle" --po my_translation.po --lang-name pt
+
+Exemplo para Steam no disco C:
+
+   python po_to_bundle.py --bundle "C:\Program Files (x86)\Steam\steamapps\common\Zero Parades\ZeroParades_Data\StreamingAssets\aa\StandaloneWindows64\g5ibkj7vdwf2g67g_assets_all_df231fe1e06c36a5cb63c87a08cd9257.bundle" --po my_translation.po --lang-name pt
+
+Exemplo para uma biblioteca Steam no disco D:
+
+   python po_to_bundle.py --bundle "D:\SteamLibrary\steamapps\common\Zero Parades\ZeroParades_Data\StreamingAssets\aa\StandaloneWindows64\g5ibkj7vdwf2g67g_assets_all_df231fe1e06c36a5cb63c87a08cd9257.bundle" --po my_translation.po --lang-name pt
+
+5. Abra o jogo e selecione Deutsch/Alemao em Settings -> Language.
+   A traducao PT-BR usa esse slot de idioma.
+
+Requisitos:
+
+- Zero Parades instalado pela Steam.
+- Python 3 no Windows.
+  O instalador tenta instalar Python automaticamente via winget.
+  Se isso falhar, instale manualmente por:
+  https://www.python.org/downloads/
+  Durante a instalacao, marque "Add python.exe to PATH".
+
+Observacoes:
+
+- Este pacote distribui apenas a traducao e scripts de patch.
+- Ele nao inclui arquivos originais do jogo.
+- O instalador cria backup do bundle original com extensao .bak.
+- Se uma atualizacao da Steam restaurar o jogo, rode o instalador de novo.
+- No jogo, selecione Deutsch/Alemao para ativar o PT-BR.
+
+O que o Instalar_PTBR.bat faz:
+
+O arquivo .bat apenas abre o PowerShell do Windows e executa o script
+Instalar_PTBR.ps1 que esta nesta mesma pasta.
+
+O script faz estes passos:
+
+1. Confere se os arquivos da traducao estao na pasta.
+2. Procura Python 3 no computador.
+3. Se Python nao existir, tenta instalar Python usando winget, ferramenta oficial
+   do Windows para instalar programas.
+4. Instala as dependencias Python necessarias: UnityPy e polib.
+5. Procura a pasta do Zero Parades na Steam.
+6. Cria backup automatico do bundle original, se ainda nao existir.
+7. Aplica a traducao no bundle local do seu proprio jogo.
+
+Seguranca:
+
+- O instalador nao contem executavel desconhecido.
+- O .bat e o .ps1 podem ser abertos no Bloco de Notas para verificacao.
+- O pacote nao envia arquivos, chaves, dados pessoais ou informacoes do PC.
+- O pacote nao modifica nada fora da pasta do Zero Parades, exceto pela
+  instalacao de dependencias Python caso elas ainda nao existam.
+- Para desfazer, use a verificacao de integridade de arquivos da Steam.

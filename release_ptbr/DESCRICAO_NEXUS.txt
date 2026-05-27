@@ -1,0 +1,142 @@
+TRADUCAO PT-BR
+Zero Parades: For Dead Spies
+
+Patch amador nao oficial que traduz Zero Parades para portugues brasileiro.
+Criado com traducao automatica por IA e revisao automatica/manual.
+
+Esta traducao nao e oficial. Os desenvolvedores de Zero Parades nao tem envolvimento com este mod.
+
+IMPORTANTE
+
+Este pacote nao inclui arquivos originais do jogo.
+Ele contem apenas:
+
+- a traducao em formato .po
+- scripts de instalacao
+- scripts necessarios para aplicar a traducao no jogo instalado pelo usuario
+
+Isso evita distribuir o bundle original do jogo.
+
+COMO FUNCIONA
+
+O instalador localiza a instalacao Steam de Zero Parades e injeta a traducao PT-BR no bundle local do usuario.
+Depois da instalacao, abra o jogo em Settings -> Language e selecione Deutsch/Alemao.
+A traducao PT-BR aparece nesse slot de idioma.
+
+INSTALACAO
+
+1. Baixe o arquivo ZeroParades_PTBR_Installer.zip.
+2. Extraia o zip em qualquer pasta.
+3. Execute Instalar_PTBR.bat.
+4. Aguarde o instalador terminar.
+5. Abra o jogo, va em Settings -> Language e selecione Deutsch/Alemao.
+
+O instalador tenta encontrar o jogo automaticamente.
+Se nao encontrar, ele pede o caminho manual do arquivo bundle.
+
+INSTALACAO MANUAL
+
+Use este metodo se voce nao quiser usar o .bat ou se preferir aplicar a traducao
+por terminal.
+
+1. Instale Python 3:
+   https://www.python.org/downloads/
+
+2. Extraia o zip da traducao.
+
+3. Abra o PowerShell dentro da pasta extraida.
+
+4. Instale as dependencias:
+
+   python -m pip install -r requirements.txt
+
+5. Execute o patch apontando para o bundle do seu jogo:
+
+   python po_to_bundle.py --bundle "CAMINHO_DO_JOGO\ZeroParades_Data\StreamingAssets\aa\StandaloneWindows64\g5ibkj7vdwf2g67g_assets_all_df231fe1e06c36a5cb63c87a08cd9257.bundle" --po my_translation.po --lang-name pt
+
+Exemplo Steam no disco C:
+
+   python po_to_bundle.py --bundle "C:\Program Files (x86)\Steam\steamapps\common\Zero Parades\ZeroParades_Data\StreamingAssets\aa\StandaloneWindows64\g5ibkj7vdwf2g67g_assets_all_df231fe1e06c36a5cb63c87a08cd9257.bundle" --po my_translation.po --lang-name pt
+
+Exemplo Steam no disco D:
+
+   python po_to_bundle.py --bundle "D:\SteamLibrary\steamapps\common\Zero Parades\ZeroParades_Data\StreamingAssets\aa\StandaloneWindows64\g5ibkj7vdwf2g67g_assets_all_df231fe1e06c36a5cb63c87a08cd9257.bundle" --po my_translation.po --lang-name pt
+
+Se o comando terminar com "Done", a traducao foi aplicada.
+Depois disso, abra o jogo e selecione Deutsch/Alemao em Settings -> Language.
+
+REQUISITOS
+
+- Zero Parades instalado pela Steam.
+- Windows.
+- Python 3.
+
+Se Python 3 nao estiver instalado, o instalador tenta instalar automaticamente usando winget.
+Se isso falhar, instale Python manualmente em:
+https://www.python.org/downloads/
+
+Durante a instalacao do Python, marque:
+Add python.exe to PATH
+
+O QUE O INSTALADOR FAZ
+
+O arquivo Instalar_PTBR.bat nao e um instalador fechado.
+Ele apenas abre o PowerShell do Windows e executa Instalar_PTBR.ps1, que tambem
+esta incluido no pacote e pode ser lido em qualquer editor de texto.
+
+O script:
+
+1. Confere se os arquivos da traducao estao presentes.
+2. Procura Python 3.
+3. Se Python nao existir, tenta instalar via winget, ferramenta oficial do Windows.
+4. Instala somente as dependencias Python necessarias para editar bundle Unity:
+   UnityPy e polib.
+5. Procura a instalacao Steam de Zero Parades.
+6. Cria backup do bundle original com extensao .bak, se ainda nao existir.
+7. Aplica a traducao no bundle local do proprio usuario.
+
+SEGURANCA / PRIVACIDADE
+
+- Nao inclui arquivos originais do jogo.
+- Nao envia dados para nenhum servidor.
+- Nao pede login, senha, token ou chave de API.
+- Nao mexe em saves.
+- Nao modifica outros jogos.
+- Pode ser removido pela verificacao de integridade da Steam.
+- O codigo do .bat e do .ps1 e aberto e pode ser inspecionado antes de executar.
+
+QUALIDADE DA TRADUCAO
+
+- Traducao feita com IA.
+- Revisada com verificacoes automaticas de markup e consistencia.
+- Revisao manual aplicada em varios residuos de PT-PT, espanhol remanescente e acentos quebrados.
+- Ainda pode conter erros de contexto, tom ou terminologia.
+
+STATUS TECNICO
+
+- 69.916 entradas traduzidas.
+- 0 entradas vazias na QA final.
+- 0 markup quebrado na QA final.
+
+DESINSTALACAO
+
+Na Steam:
+
+1. Clique com o botao direito no jogo.
+2. Propriedades.
+3. Arquivos instalados.
+4. Verificar integridade dos arquivos.
+
+A Steam restaurara os arquivos originais.
+
+OBSERVACAO SOBRE UPDATES
+
+Se o jogo atualizar, a Steam pode restaurar o bundle original.
+Nesse caso, execute Instalar_PTBR.bat novamente.
+
+CREDITOS
+
+Traducao PT-BR: LuanHii
+Ferramentas baseadas no toolkit comunitario de traducao de Zero Parades.
+
+Mod gratuito, nao oficial e feito para a comunidade.
