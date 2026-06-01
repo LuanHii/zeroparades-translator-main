@@ -13,6 +13,23 @@ Como instalar:
 4. Abra o jogo e va em Settings -> Language.
 5. Selecione Deutsch/Alemao. A traducao PT-BR aparece nesse slot.
 
+Como instalar pelo PowerShell:
+
+Use este metodo se o .bat nao abrir, se voce quiser ver as mensagens do script,
+ou se preferir executar o .ps1 diretamente.
+
+1. Extraia esta pasta em qualquer lugar.
+2. Abra o PowerShell dentro desta pasta.
+   Dica: clique com o botao direito dentro da pasta e escolha
+   "Abrir no Terminal".
+3. Execute:
+
+   powershell -NoProfile -ExecutionPolicy Bypass -File .\Instalar_PTBR.ps1
+
+Se aparecer erro de permissao ao criar backup ou modificar o bundle da Steam,
+feche o jogo e a Steam, abra o PowerShell como Administrador, entre novamente
+nesta pasta e rode o mesmo comando.
+
 Instalacao manual:
 
 Use este metodo se voce nao quiser usar o .bat ou se o instalador nao encontrar
@@ -29,19 +46,23 @@ o jogo automaticamente.
 
    python -m pip install -r requirements.txt
 
-4. Rode o patch apontando para o bundle do seu jogo:
+4. Descubra o nome real do bundle do seu jogo:
 
-   python po_to_bundle.py --bundle "CAMINHO_DO_JOGO\ZeroParades_Data\StreamingAssets\aa\StandaloneWindows64\g5ibkj7vdwf2g67g_assets_all_df231fe1e06c36a5cb63c87a08cd9257.bundle" --po my_translation.po --lang-name pt
+   Get-ChildItem "CAMINHO_DO_JOGO\ZeroParades_Data\StreamingAssets\aa\StandaloneWindows64\*_assets_all_*.bundle" | Select-Object -ExpandProperty FullName
+
+5. Rode o patch apontando para o arquivo encontrado:
+
+   python po_to_bundle.py --bundle "CAMINHO_DO_JOGO\ZeroParades_Data\StreamingAssets\aa\StandaloneWindows64\NOME_REAL_DO_BUNDLE.bundle" --po my_translation.po --lang-name pt
 
 Exemplo para Steam no disco C:
 
-   python po_to_bundle.py --bundle "C:\Program Files (x86)\Steam\steamapps\common\Zero Parades\ZeroParades_Data\StreamingAssets\aa\StandaloneWindows64\g5ibkj7vdwf2g67g_assets_all_df231fe1e06c36a5cb63c87a08cd9257.bundle" --po my_translation.po --lang-name pt
+   python po_to_bundle.py --bundle "C:\Program Files (x86)\Steam\steamapps\common\Zero Parades\ZeroParades_Data\StreamingAssets\aa\StandaloneWindows64\NOME_REAL_DO_BUNDLE.bundle" --po my_translation.po --lang-name pt
 
 Exemplo para uma biblioteca Steam no disco D:
 
-   python po_to_bundle.py --bundle "D:\SteamLibrary\steamapps\common\Zero Parades\ZeroParades_Data\StreamingAssets\aa\StandaloneWindows64\g5ibkj7vdwf2g67g_assets_all_df231fe1e06c36a5cb63c87a08cd9257.bundle" --po my_translation.po --lang-name pt
+   python po_to_bundle.py --bundle "D:\SteamLibrary\steamapps\common\Zero Parades\ZeroParades_Data\StreamingAssets\aa\StandaloneWindows64\NOME_REAL_DO_BUNDLE.bundle" --po my_translation.po --lang-name pt
 
-5. Abra o jogo e selecione Deutsch/Alemao em Settings -> Language.
+6. Abra o jogo e selecione Deutsch/Alemao em Settings -> Language.
    A traducao PT-BR usa esse slot de idioma.
 
 Requisitos:
@@ -58,6 +79,8 @@ Observacoes:
 - Este pacote distribui apenas a traducao e scripts de patch.
 - Ele nao inclui arquivos originais do jogo.
 - O instalador cria backup do bundle original com extensao .bak.
+- Normalmente nao precisa executar como Administrador. Use Administrador apenas
+  se houver erro de permissao ao editar a pasta da Steam.
 - Se uma atualizacao da Steam restaurar o jogo, rode o instalador de novo.
 - No jogo, selecione Deutsch/Alemao para ativar o PT-BR.
 

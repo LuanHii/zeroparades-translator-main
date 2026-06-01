@@ -1,6 +1,7 @@
 $ErrorActionPreference = "Stop"
 
 $BundleName = "g5ibkj7vdwf2g67g_assets_all_df231fe1e06c36a5cb63c87a08cd9257.bundle"
+$BundlePattern = "*_assets_all_*.bundle"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $PoPath = Join-Path $ScriptDir "my_translation.po"
 $PatchScript = Join-Path $ScriptDir "po_to_bundle.py"
@@ -88,6 +89,25 @@ function Get-SteamRoots {
         }
     }
 
+    foreach ($drive in [System.IO.DriveInfo]::GetDrives()) {
+        if (-not $drive.IsReady) {
+            continue
+        }
+
+        $root = $drive.RootDirectory.FullName
+        foreach ($fallback in @(
+            "SteamLibrary",
+            "Steam",
+            "Program Files (x86)\Steam",
+            "Program Files\Steam"
+        )) {
+            $candidate = Join-Path $root $fallback
+            if (Test-Path -LiteralPath $candidate) {
+                $roots.Add($candidate)
+            }
+        }
+    }
+
     return $roots | Select-Object -Unique
 }
 
@@ -114,17 +134,73 @@ function Get-SteamLibraries {
     return $libraries | Select-Object -Unique
 }
 
-function Find-ZeroParadesBundle {
-    $relative = "steamapps\common\Zero Parades\ZeroParades_Data\StreamingAssets\aa\StandaloneWindows64\$BundleName"
+function Find-BundleInDirectory($Directory) {
+    if (-not (Test-Path -LiteralPath $Directory -PathType Container)) {
+        return $null
+    }
 
+    $exact = Join-Path $Directory $BundleName
+    if (Test-Path -LiteralPath $exact -PathType Leaf) {
+        return $exact
+    }
+
+    $matches = @(Get-ChildItem -LiteralPath $Directory -Filter $BundlePattern -File -ErrorAction SilentlyContinue | Sort-Object Name)
+    if ($matches.Count -eq 0) {
+        return $null
+    }
+
+    $preferred = $matches | Where-Object { $_.Name -like "g5ibkj7vdwf2g67g_assets_all_*.bundle" } | Select-Object -First 1
+    if ($preferred) {
+        return $preferred.FullName
+    }
+
+    return $matches[0].FullName
+}
+
+function Find-ZeroParadesBundle {
     foreach ($library in Get-SteamLibraries) {
-        $candidate = Join-Path $library $relative
-        if (Test-Path -LiteralPath $candidate) {
-            return $candidate
+        $common = Join-Path $library "steamapps\common"
+
+        foreach ($gameDir in @("Zero Parades", "ZeroParades", "Zero Parades For Dead Spies")) {
+            $bundleDir = Join-Path $common "$gameDir\ZeroParades_Data\StreamingAssets\aa\StandaloneWindows64"
+            $candidate = Find-BundleInDirectory $bundleDir
+            if ($candidate) {
+                return $candidate
+            }
+        }
+
+        $expectedGameDir = Join-Path $common "Zero Parades"
+        if (Test-Path -LiteralPath $expectedGameDir -PathType Container) {
+            $match = Get-ChildItem -LiteralPath $expectedGameDir -Recurse -Filter $BundlePattern -File -ErrorAction SilentlyContinue | Sort-Object Name | Select-Object -First 1
+            if ($match) {
+                return $match.FullName
+            }
         }
     }
 
     return $null
+}
+
+function Resolve-BundlePath($Path) {
+    $resolved = $Path.Trim('"')
+
+    if ((Test-Path -LiteralPath $resolved -PathType Container)) {
+        $found = Find-BundleInDirectory $resolved
+        if (-not $found) {
+            throw "Nenhum bundle $BundlePattern foi encontrado na pasta: $resolved"
+        }
+        $resolved = $found
+    }
+
+    if (-not (Test-Path -LiteralPath $resolved -PathType Leaf)) {
+        throw "Bundle nao encontrado: $resolved"
+    }
+
+    if ([System.IO.Path]::GetFileName($resolved) -notlike $BundlePattern) {
+        throw "O caminho precisa apontar para um arquivo $BundlePattern"
+    }
+
+    return $resolved
 }
 
 Write-Host "Zero Parades - Instalador da traducao PT-BR" -ForegroundColor Green
@@ -161,14 +237,12 @@ Write-Step "Procurando Zero Parades na Steam"
 $bundle = Find-ZeroParadesBundle
 if (-not $bundle) {
     Write-Host "Nao consegui achar o bundle automaticamente." -ForegroundColor Yellow
-    Write-Host "Cole o caminho completo do arquivo $BundleName"
+    Write-Host "Cole o caminho completo do arquivo $BundleName ou outro *_assets_all_*.bundle"
+    Write-Host "Tambem aceito a pasta StandaloneWindows64 que contem esse arquivo."
     $bundle = Read-Host "Caminho"
-    $bundle = $bundle.Trim('"')
 }
 
-if (-not (Test-Path -LiteralPath $bundle)) {
-    throw "Bundle nao encontrado: $bundle"
-}
+$bundle = Resolve-BundlePath $bundle
 
 Write-Host "Bundle encontrado:"
 Write-Host $bundle
